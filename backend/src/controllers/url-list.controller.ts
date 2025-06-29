@@ -29,19 +29,19 @@ export class UrlListController {
   }
 
   @Get()
-  @ApiResponse({ status: 200, description: 'Successful operation.', schema: { $ref: getSchemaPath(UrlListDto) }, type: [UrlListDto] })
+  @ApiResponse({ status: 200, description: 'Successful operation.', type: [UrlListDto] })
   findAll() {
     return this.getAllUrlListsUseCase.execute();
   }
 
   @Get(':id')
-  @ApiResponse({ status: 200, description: 'Successful operation.', schema: { $ref: getSchemaPath(UrlListDto) } })
+  @ApiResponse({ status: 200, description: 'Successful operation.' })
   findOne(@Param('id') id: string) {
     return this.getUrlListByIdUseCase.execute(id);
   }
 
   @Get('slug/:slug')
-  @ApiResponse({ status: 200, description: 'Successful operation.', schema: { $ref: getSchemaPath(UrlListDto) } })
+  @ApiResponse({ status: 200, description: 'Successful operation.' })
   findBySlug(@Param('slug') slug: string) {
     return this.getUrlListBySlugUseCase.execute(slug);
   }
