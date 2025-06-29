@@ -16,10 +16,13 @@
 import * as runtime from '../runtime';
 import type {
   CreateUrlListDto,
+  UrlListDto,
 } from '../models/index';
 import {
     CreateUrlListDtoFromJSON,
     CreateUrlListDtoToJSON,
+    UrlListDtoFromJSON,
+    UrlListDtoToJSON,
 } from '../models/index';
 
 export interface UrlListControllerCreateRequest {
@@ -69,11 +72,11 @@ export interface UrlListApiInterface {
      * @throws {RequiredError}
      * @memberof UrlListApiInterface
      */
-    urlListControllerFindAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    urlListControllerFindAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UrlListDto>>>;
 
     /**
      */
-    urlListControllerFindAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    urlListControllerFindAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UrlListDto>>;
 
     /**
      * 
@@ -170,7 +173,7 @@ export class UrlListApi extends runtime.BaseAPI implements UrlListApiInterface {
 
     /**
      */
-    async urlListControllerFindAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async urlListControllerFindAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UrlListDto>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -182,13 +185,14 @@ export class UrlListApi extends runtime.BaseAPI implements UrlListApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UrlListDtoFromJSON));
     }
 
     /**
      */
-    async urlListControllerFindAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.urlListControllerFindAllRaw(initOverrides);
+    async urlListControllerFindAll(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<UrlListDto>> {
+        const response = await this.urlListControllerFindAllRaw(initOverrides);
+        return await response.value();
     }
 
     /**
