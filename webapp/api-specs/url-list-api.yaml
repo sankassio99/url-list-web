@@ -1,0 +1,313 @@
+openapi: 3.0.0
+info:
+  title: URL List API
+  description: API for managing lists of URLs
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Development server
+paths:
+  /url-lists:
+    get:
+      summary: Get all URL lists
+      operationId: getAllUrlLists
+      responses:
+        '200':
+          description: A list of URL lists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UrlList'
+    post:
+      summary: Create a new URL list
+      operationId: createUrlList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUrlListDto'
+      responses:
+        '201':
+          description: URL list created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlList'
+  
+  /url-lists/{id}:
+    get:
+      summary: Get URL list by ID
+      operationId: getUrlListById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: URL list found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlList'
+        '404':
+          description: URL list not found
+    
+    patch:
+      summary: Update URL list
+      operationId: updateUrlList
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUrlListDto'
+      responses:
+        '200':
+          description: URL list updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlList'
+        '404':
+          description: URL list not found
+    
+    delete:
+      summary: Delete URL list
+      operationId: deleteUrlList
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: URL list deleted
+        '404':
+          description: URL list not found
+  
+  /url-lists/{id}/urls:
+    get:
+      summary: Get URLs by list ID
+      operationId: getUrlsByListId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: URLs for list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Url'
+        '404':
+          description: URL list not found
+  
+  /url-lists/slug/{slug}:
+    get:
+      summary: Get URL list by slug
+      operationId: getUrlListBySlug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: URL list found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UrlList'
+        '404':
+          description: URL list not found
+
+  /urls:
+    post:
+      summary: Create a new URL
+      operationId: createUrl
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUrlDto'
+      responses:
+        '201':
+          description: URL created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Url'
+  
+  /urls/{id}:
+    patch:
+      summary: Update URL
+      operationId: updateUrl
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUrlDto'
+      responses:
+        '200':
+          description: URL updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Url'
+        '404':
+          description: URL not found
+    
+    delete:
+      summary: Delete URL
+      operationId: deleteUrl
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: URL deleted
+        '404':
+          description: URL not found
+
+components:
+  schemas:
+    UrlList:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        slug:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - slug
+        - createdAt
+        - updatedAt
+    
+    CreateUrlListDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+      required:
+        - name
+    
+    UpdateUrlListDto:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      
+    Url:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+          nullable: true
+        position:
+          type: integer
+        urlListId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - url
+        - position
+        - urlListId
+        - createdAt
+        - updatedAt
+    
+    CreateUrlDto:
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+          nullable: true
+        position:
+          type: integer
+        urlListId:
+          type: string
+      required:
+        - title
+        - url
+        - urlListId
+    
+    UpdateUrlDto:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        position:
+          type: integer
+          nullable: true

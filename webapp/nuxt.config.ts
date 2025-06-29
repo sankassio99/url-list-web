@@ -8,6 +8,12 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/main.css'
   ],
+  
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:3001'
+    }
+  },
 
   modules: [
     '@nuxt/content',

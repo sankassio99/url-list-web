@@ -1,0 +1,10 @@
+.openapi-generator-ignore
+apis/AppApi.ts
+apis/UrlApi.ts
+apis/UrlListApi.ts
+apis/index.ts
+index.ts
+models/CreateUrlDto.ts
+models/CreateUrlListDto.ts
+models/index.ts
+runtime.ts
