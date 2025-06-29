@@ -1,4 +1,4 @@
-import type { CreateUrlListDto, UrlListApi, UrlListControllerCreateRequest, UrlListControllerFindOneRequest } from "~/api-client";
+import type { CreateUrlListDto, UrlListApi, UrlListControllerCreateRequest, UrlListControllerFindOneRequest, UrlListControllerRemoveRequest } from "~/api-client";
 import type { IUrlListRepository } from "./IUrlListRepository";
 import type { UrlList, UrlItem } from "./localStorage";
 import { useApiClient } from '~/composables/useApiClient';
@@ -36,8 +36,8 @@ export class ApiClientRepository implements IUrlListRepository {
     updateList(updatedList: UrlList): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    deleteList(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteList(id: string): Promise<void> {
+        return await this.urlListApi.urlListControllerRemove(<UrlListControllerRemoveRequest>{ id }) as unknown as Promise<void>;
     }
     addUrlToList(listId: string, url: string): Promise<UrlItem> {
         throw new Error("Method not implemented.");

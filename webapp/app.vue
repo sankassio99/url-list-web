@@ -5,7 +5,7 @@
       <NuxtPage />
     </main>
     <footer class="bg-white border-t border-gray-200 py-4">
-      <ApiClientExample />
+      <!-- <ApiClientExample /> -->
 
       <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
         &copy; {{ new Date().getFullYear() }} The Urlist - Share your favorite links easily.
@@ -15,7 +15,13 @@
 </template>
 
 <script setup>
-import ApiClientExample from './components/examples/ApiClientExample.vue';
+import { ApiClientRepository } from './store/apiClientRepository';
+import { provide } from 'vue'
+
+const urlListRepository = new ApiClientRepository();
+
+provide('urlListRepository', urlListRepository);
+
 
 // script content
 </script>

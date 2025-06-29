@@ -82,13 +82,14 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useLocalStorageService, type UrlItem, type UrlList } from '~/store/localStorage';
+import type { IUrlListRepository } from '~/store/IUrlListRepository';
+import type { UrlItem, UrlList } from '~/store/localStorage';
 
 const props = defineProps<{
   listId: string;
 }>();
 
-const storageService = useLocalStorageService();
+const storageService = inject<IUrlListRepository>('urlListRepository') as IUrlListRepository;
 const router = useRouter();
 
 const urlList = ref<UrlList | null>(null);
@@ -103,18 +104,18 @@ onMounted(() => {
   loadList();
 });
 
-watch(() => props.listId, () => {
-  loadList();
+watch(() => props.listId, async () => {
+  await loadList();
 });
 
-const loadList = () => {
+const loadList = async () => {
   if (!props.listId) {
     router.push('/');
     return;
   }
-  
-  const list = storageService.getListById(props.listId);
-  
+
+  const list = await storageService?.getListById(props.listId);
+
   if (!list) {
     router.push('/lists');
     return;
