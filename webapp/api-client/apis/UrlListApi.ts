@@ -60,11 +60,11 @@ export interface UrlListApiInterface {
      * @throws {RequiredError}
      * @memberof UrlListApiInterface
      */
-    urlListControllerCreateRaw(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    urlListControllerCreateRaw(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UrlListDto>>;
 
     /**
      */
-    urlListControllerCreate(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    urlListControllerCreate(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UrlListDto>;
 
     /**
      * 
@@ -140,7 +140,7 @@ export class UrlListApi extends runtime.BaseAPI implements UrlListApiInterface {
 
     /**
      */
-    async urlListControllerCreateRaw(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async urlListControllerCreateRaw(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UrlListDto>> {
         if (requestParameters['createUrlListDto'] == null) {
             throw new runtime.RequiredError(
                 'createUrlListDto',
@@ -162,13 +162,14 @@ export class UrlListApi extends runtime.BaseAPI implements UrlListApiInterface {
             body: CreateUrlListDtoToJSON(requestParameters['createUrlListDto']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => UrlListDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async urlListControllerCreate(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.urlListControllerCreateRaw(requestParameters, initOverrides);
+    async urlListControllerCreate(requestParameters: UrlListControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UrlListDto> {
+        const response = await this.urlListControllerCreateRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

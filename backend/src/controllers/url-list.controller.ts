@@ -24,8 +24,10 @@ export class UrlListController {
   ) {}
 
   @Post()
+  @ApiResponse({ status: 200, description: 'Successful operation.', type: UrlListDto })
   create(@Body() createUrlListDto: CreateUrlListDto) {
-    return this.createUrlListUseCase.execute(createUrlListDto);
+    const created = this.createUrlListUseCase.execute(createUrlListDto);
+    return created;
   }
 
   @Get()
