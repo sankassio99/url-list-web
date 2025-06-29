@@ -35,11 +35,13 @@ export class UrlListController {
   }
 
   @Get(':id')
+  @ApiResponse({ status: 200, description: 'Successful operation.', schema: { $ref: getSchemaPath(UrlListDto) } })
   findOne(@Param('id') id: string) {
     return this.getUrlListByIdUseCase.execute(id);
   }
 
   @Get('slug/:slug')
+  @ApiResponse({ status: 200, description: 'Successful operation.', schema: { $ref: getSchemaPath(UrlListDto) } })
   findBySlug(@Param('slug') slug: string) {
     return this.getUrlListBySlugUseCase.execute(slug);
   }
