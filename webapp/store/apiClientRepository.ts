@@ -1,7 +1,8 @@
-import type { CreateUrlListDto, UrlListApi, UrlListControllerCreateRequest, UrlListControllerFindOneRequest, UrlListControllerRemoveRequest } from "~/api-client";
+import type { CreateUrlListDto, UrlDto, UrlListApi, UrlListControllerCreateRequest, UrlListControllerFindOneRequest, UrlListControllerRemoveRequest, UrlListDto } from "~/api-client";
 import type { IUrlListRepository } from "./IUrlListRepository";
 import type { UrlList, UrlItem } from "./localStorage";
 import { useApiClient } from '~/composables/useApiClient';
+import UrlItem from "~/components/UrlItem.vue";
 
 
 export class ApiClientRepository implements IUrlListRepository {
@@ -27,9 +28,35 @@ export class ApiClientRepository implements IUrlListRepository {
    
         return created;
     }
-    getListById(id: string): Promise<UrlList | undefined> {
-        return this.urlListApi.urlListControllerFindOne(<UrlListControllerFindOneRequest>{ id }) as unknown as Promise<UrlList | undefined>;
+    async getListById(id: string): Promise<UrlList | undefined> {
+        const item = await this.urlListApi.urlListControllerFindOne(<UrlListControllerFindOneRequest>{ id });
+        
+        return this.mapUrlList(item);
     }
+
+    private mapUrlList(item: UrlListDto) {
+        let urlList: UrlList = {} as UrlList;
+
+        urlList.id = item.id;
+        urlList.name = item.title;
+        urlList.urls = this.mapUrlItem(item.urls) || [];
+        urlList.createdAt = item.createdAt.toISOString();
+        urlList.customSlug = item.slug;
+
+        return urlList;
+    }
+
+    private mapUrlItem(urls: Array<UrlDto>): UrlItem[] {
+        return urls.map(url => {
+            let urlItem: UrlItem = {} as UrlItem;
+            urlItem.id = url.id;
+            urlItem.title = url.title;
+            urlItem.url = url.url;
+            urlItem.createdAt = url.createdAt.toISOString();
+            return urlItem;
+        });
+    }
+
     getListBySlug(slug: string): Promise<UrlList | undefined> {
         throw new Error("Method not implemented.");
     }

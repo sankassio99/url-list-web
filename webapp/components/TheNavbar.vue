@@ -48,9 +48,9 @@ const toggleMenu = () => {
   showMenu.value = !showMenu.value;
 };
 
-const createNewList = () => {
+const createNewList = async () => {
   try {
-    const newList = storageService.createList();
+    const newList = await storageService.createList();
     router.push(`/list/${newList.id}`);
     showMenu.value = false;
   } catch (error) {

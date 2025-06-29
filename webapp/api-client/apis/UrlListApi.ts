@@ -85,11 +85,11 @@ export interface UrlListApiInterface {
      * @throws {RequiredError}
      * @memberof UrlListApiInterface
      */
-    urlListControllerFindBySlugRaw(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    urlListControllerFindBySlugRaw(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UrlListDto>>;
 
     /**
      */
-    urlListControllerFindBySlug(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    urlListControllerFindBySlug(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UrlListDto>;
 
     /**
      * 
@@ -98,11 +98,11 @@ export interface UrlListApiInterface {
      * @throws {RequiredError}
      * @memberof UrlListApiInterface
      */
-    urlListControllerFindOneRaw(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    urlListControllerFindOneRaw(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UrlListDto>>;
 
     /**
      */
-    urlListControllerFindOne(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    urlListControllerFindOne(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UrlListDto>;
 
     /**
      * 
@@ -198,7 +198,7 @@ export class UrlListApi extends runtime.BaseAPI implements UrlListApiInterface {
 
     /**
      */
-    async urlListControllerFindBySlugRaw(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async urlListControllerFindBySlugRaw(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UrlListDto>> {
         if (requestParameters['slug'] == null) {
             throw new runtime.RequiredError(
                 'slug',
@@ -217,18 +217,19 @@ export class UrlListApi extends runtime.BaseAPI implements UrlListApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => UrlListDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async urlListControllerFindBySlug(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.urlListControllerFindBySlugRaw(requestParameters, initOverrides);
+    async urlListControllerFindBySlug(requestParameters: UrlListControllerFindBySlugRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UrlListDto> {
+        const response = await this.urlListControllerFindBySlugRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
      */
-    async urlListControllerFindOneRaw(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async urlListControllerFindOneRaw(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UrlListDto>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -247,13 +248,14 @@ export class UrlListApi extends runtime.BaseAPI implements UrlListApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => UrlListDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async urlListControllerFindOne(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.urlListControllerFindOneRaw(requestParameters, initOverrides);
+    async urlListControllerFindOne(requestParameters: UrlListControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UrlListDto> {
+        const response = await this.urlListControllerFindOneRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

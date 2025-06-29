@@ -37,13 +37,13 @@ export class UrlListController {
   }
 
   @Get(':id')
-  @ApiResponse({ status: 200, description: 'Successful operation.' })
+  @ApiResponse({ status: 200, description: 'Successful operation.', type: UrlListDto  })
   findOne(@Param('id') id: string) {
     return this.getUrlListByIdUseCase.execute(id);
   }
 
   @Get('slug/:slug')
-  @ApiResponse({ status: 200, description: 'Successful operation.' })
+  @ApiResponse({ status: 200, description: 'Successful operation.', type: UrlListDto })
   findBySlug(@Param('slug') slug: string) {
     return this.getUrlListBySlugUseCase.execute(slug);
   }

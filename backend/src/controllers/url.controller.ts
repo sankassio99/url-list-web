@@ -5,6 +5,8 @@ import { CreateUrlUseCase } from '../use-cases/create-url.use-case';
 import { DeleteUrlUseCase } from '../use-cases/delete-url.use-case';
 import { GetUrlsByListIdUseCase } from '../use-cases/get-urls-by-list-id.use-case';
 import { UpdateUrlUseCase } from '../use-cases/update-url.use-case';
+import { ApiResponse } from '@nestjs/swagger';
+import { UrlListDto } from 'src/dtos/url-list.dto';
 
 @Controller('urls')
 export class UrlController {
