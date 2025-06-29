@@ -1,8 +1,7 @@
 import type { CreateUrlListDto, UrlDto, UrlListApi, UrlListControllerCreateRequest, UrlListControllerFindOneRequest, UrlListControllerRemoveRequest, UrlListDto } from "~/api-client";
-import type { IUrlListRepository } from "./IUrlListRepository";
-import type { UrlList, UrlItem } from "./localStorage";
 import { useApiClient } from '~/composables/useApiClient';
-import UrlItem from "~/components/UrlItem.vue";
+import type { IUrlListRepository } from "./IUrlListRepository";
+import type { UrlItem, UrlList } from "./localStorage";
 
 
 export class ApiClientRepository implements IUrlListRepository {
@@ -15,8 +14,7 @@ export class ApiClientRepository implements IUrlListRepository {
 
     async getAllLists(): Promise<UrlList[]> {
         const lists = await this.urlListApi.urlListControllerFindAll();
-        console.log("Fetched lists:", lists);
-        return lists as unknown as Promise<UrlList[]>;
+        return lists.map(item => this.mapUrlList(item));
     }
     async createList(name?: string, customSlug?: string): Promise<UrlList> {
         const createUrlListDto: CreateUrlListDto = {
@@ -30,7 +28,7 @@ export class ApiClientRepository implements IUrlListRepository {
     }
     async getListById(id: string): Promise<UrlList | undefined> {
         const item = await this.urlListApi.urlListControllerFindOne(<UrlListControllerFindOneRequest>{ id });
-        
+
         return this.mapUrlList(item);
     }
 
