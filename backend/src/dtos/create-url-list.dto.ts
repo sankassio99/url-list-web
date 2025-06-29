@@ -6,6 +6,5 @@ export class CreateUrlListDto {
   slug?: string;
 
   @IsString()
-  @IsOptional()
-  title?: string;
+  title: string;
 }
